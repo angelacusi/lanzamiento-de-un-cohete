@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="Simulación educativa del lanzamiento vertical de un cohete con el método de Euler y comparación con su solución analítica.">
+  <title>Misión espacial | El método de Euler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Misión espacial, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span>NASA <strong>· 1962</strong></span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="#contexto">Contexto</a>
+      <a href="#modelo">El modelo</a>
+      <a href="#simulacion">Simulador</a>
+      <a href="#resultados">Resultados</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-stars" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow"><span class="live-dot"></span> DESAFÍO DE MÉTODOS NUMÉRICOS · 1962</p>
+        <h1>Una misión.<br><span>Un cálculo.</span></h1>
+        <p class="hero-subtitle">Acompaña el despegue de un cohete y descubre cómo el método de Euler aproxima su velocidad y altura, paso a paso.</p>
+        <a class="button button-primary" href="#simulacion">Iniciar simulación <span aria-hidden="true">↗</span></a>
+        <div class="hero-meta"><span>MODELO EDUCATIVO</span><i></i><span>COHETE EXPERIMENTAL FICTICIO</span></div>
+      </div>
+      <div class="hero-art" role="img" aria-label="Ilustración de un cohete ascendiendo sobre la Tierra">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="planet"></div>
+        <div class="rocket">
+          <div class="rocket-nose"></div>
+          <div class="rocket-window"></div>
+          <div class="rocket-body"><span>NASA</span></div>
+          <div class="rocket-fin fin-left"></div>
+          <div class="rocket-fin fin-right"></div>
+          <div class="rocket-flame"></div>
+        </div>
+        <span class="star star-one">✦</span><span class="star star-two">✦</span>
+        <span class="star star-three">·</span><span class="star star-four">·</span>
+        <span class="art-label label-speed">VELOCIDAD <b>v(t)</b></span>
+        <span class="art-label label-height">ALTURA <b>y(t)</b></span>
+        <div class="art-caption"><span class="caption-line"></span> Trayectoria simulada</div>
+      </div>
+      <div class="hero-bottom"><span>01 — 04</span><span>LA CIENCIA TAMBIÉN SE ESCRIBE CON NÚMEROS</span><span aria-hidden="true">↓</span></div>
+    </section>
+
+    <section class="section context-section" id="contexto">
+      <div class="section-kicker"><span>01</span> CONTEXTO</div>
+      <div class="context-grid">
+        <div>
+          <h2>Una carrera contra<br>lo desconocido.</h2>
+          <p class="section-lead">En 1962, John Glenn orbitó la Tierra en la misión Friendship 7. Detrás de los vuelos espaciales había equipos de matemáticas que calculaban trayectorias y verificaban los resultados de las primeras computadoras.</p>
+          <p class="body-copy">La película <i>Talentos ocultos</i> recuerda el trabajo de matemáticas como Katherine Johnson, Dorothy Vaughan y Mary Jackson durante la carrera espacial. Sus aportes reales inspiran este desafío de aula.</p>
+        </div>
+        <aside class="history-note">
+          <span class="note-icon" aria-hidden="true">✳</span>
+          <span class="mini-label">UNA ACLARACIÓN IMPORTANTE</span>
+          <p>Este cohete y sus parámetros son ficticios, creados para practicar. La simulación no reproduce la trayectoria de John Glenn ni afirma que Euler fuera el único método usado en una misión real.</p>
+          <span class="note-source">FRIENDSHIP 7 · 20 FEBRERO 1962</span>
+        </aside>
+      </div>
+      <div class="mission-strip">
+        <span class="mission-number">MISIÓN 01</span>
+        <p>Calcular el movimiento vertical de un cohete experimental durante sus primeros segundos de vuelo.</p>
+        <span class="mission-arrow" aria-hidden="true">↗</span>
+      </div>
+    </section>
+
+    <section class="model-section" id="modelo">
+      <div class="section">
+        <div class="section-kicker"><span>02</span> EL MODELO</div>
+        <div class="section-heading">
+          <h2>Las fuerzas cuentan<br>la historia del vuelo.</h2>
+          <p class="section-lead">El empuje impulsa el cohete hacia arriba; la gravedad y la resistencia del aire se oponen al movimiento.</p>
+        </div>
+        <div class="model-layout">
+          <div class="force-card">
+            <div class="force-equation">m <span>dv</span>/<span>dt</span> = T − mg − kv</div>
+            <div class="equation-caption">SEGUNDA LEY DE NEWTON · MOVIMIENTO VERTICAL</div>
+            <div class="force-list">
+              <div><i class="force-symbol thrust">↑</i><span><b>Empuje, T</b><small>Fuerza del motor que impulsa el ascenso.</small></span></div>
+              <div><i class="force-symbol gravity">↓</i><span><b>Gravedad, mg</b><small>Fuerza que atrae el cohete hacia la Tierra.</small></span></div>
+              <div><i class="force-symbol drag">↕</i><span><b>Resistencia, kv</b><small>Fuerza del aire que se opone al movimiento.</small></span></div>
+            </div>
+          </div>
+          <div class="equations-column">
+            <article class="equation-card">
+              <span class="equation-tag">ECUACIÓN DE VELOCIDAD</span>
+              <div class="equation-large">dv/dt = <b id="acceleration-expression">5,19 − 0,1v</b></div>
+              <p>Forma general: <code>dv/dt = (T − mg)/m − (k/m)v</code></p>
+            </article>
+            <article class="equation-card altitude-card">
+              <span class="equation-tag">ECUACIÓN DE ALTURA</span>
+              <div class="equation-large">dy/dt = <b>v</b></div>
+              <p>La altura cambia a la misma razón que la velocidad vertical.</p>
+            </article>
+          </div>
+        </div>
+        <div class="parameters-block">
+          <div class="parameters-heading"><div><span class="mini-label">CONDICIONES INICIALES</span><h3>Datos del cohete experimental</h3></div><span class="fiction-tag">VALORES DIDÁCTICOS</span></div>
+          <div class="parameter-grid">
+            <div><span class="parameter-symbol">m</span><span><b id="parameter-mass">1.000</b><small>kg · masa</small></span></div>
+            <div><span class="parameter-symbol">T</span><span><b id="parameter-thrust">15.000</b><small>N · empuje</small></span></div>
+            <div><span class="parameter-symbol">g</span><span><b id="parameter-gravity">9,81</b><small>m/s² · gravedad</small></span></div>
+            <div><span class="parameter-symbol">k</span><span><b id="parameter-drag">100</b><small>kg/s · resistencia</small></span></div>
+            <div><span class="parameter-symbol">v₀, y₀</span><span><b>0</b><small>m/s, m · inicio</small></span></div>
+            <div><span class="parameter-symbol">h</span><span><b id="parameter-step">2</b><small>s · paso</small></span></div>
+          </div>
+          <p class="parameter-note" id="parameter-note">Con estos valores: a = 5,19 m/s² y b = 0,1 s⁻¹. Puedes modificarlos en el simulador.</p>
+        </div>
+        <div class="analytic-block">
+          <div class="analytic-copy"><span class="mini-label">REFERENCIA PARA COMPARAR</span><h3>La solución analítica</h3><p>Al resolver las ecuaciones diferenciales obtenemos los valores exactos del modelo. Los compararemos con las aproximaciones de Euler.</p></div>
+          <div class="analytic-equations">
+            <div><span>Velocidad exacta</span><code id="exact-velocity-formula">v(t) = 51,9(1 − e<sup>−0,1t</sup>)</code></div>
+            <div><span>Altura exacta</span><code id="exact-height-formula">y(t) = 51,9t − 519(1 − e<sup>−0,1t</sup>)</code></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="simulation-section" id="simulacion">
+      <div class="section">
+        <div class="section-kicker"><span>03</span> CENTRO DE CONTROL</div>
+        <div class="section-heading sim-heading">
+          <div><h2>Tu turno en la sala<br>de control.</h2><p class="section-lead">Ajusta los parámetros y el tamaño de paso. Al reducir h se calculan más puntos, lo que puede mejorar la aproximación.</p></div>
+          <div class="control-stamp"><span>NASA</span><b>CONTROL<br>DE VUELO</b><small>SIMULACIÓN 1962</small></div>
+        </div>
+        <form class="config-panel" id="simulation-form" novalidate>
+          <div class="config-heading"><div><span class="mini-label">PARÁMETROS DE VUELO</span><h3>Configura el experimento</h3></div><span class="config-index">INPUT / 06</span></div>
+          <div class="form-grid">
+            <label>Masa <span>m (kg)</span><input id="mass-input" type="number" min="0.000001" step="any" value="1000" required></label>
+            <label>Empuje <span>T (N)</span><input id="thrust-input" type="number" min="0" step="any" value="15000" required></label>
+            <label>Gravedad <span>g (m/s²)</span><input id="gravity-input" type="number" min="0.000001" step="any" value="9.81" required></label>
+            <label>Resistencia del aire <span>k (kg/s)</span><input id="drag-input" type="number" min="0.000001" step="any" value="100" required></label>
+            <label>Tiempo total <span>t (s)</span><input id="end-time-input" type="number" min="0.000001" step="any" value="20" required></label>
+            <label>Tamaño de paso <span>h (s)</span><input id="step-input" type="number" min="0.000001" step="any" value="2" required></label>
+          </div>
+          <div id="validation-message" class="validation-message" role="alert" hidden></div>
+          <div class="form-actions"><button class="button button-primary" type="submit">Simular lanzamiento <span aria-hidden="true">↗</span></button><button class="button button-secondary" type="reset">Restablecer valores</button><span class="step-limit-note">Máximo 20.000 pasos por simulación.</span></div>
+        </form>
+
+        <div class="euler-method">
+          <div class="method-heading"><span class="method-badge">EULER<br><b>01</b></span><div><span class="mini-label">INTEGRACIÓN PASO A PASO</span><h3>Una pendiente para avanzar</h3></div></div>
+          <p>En cada instante usamos la velocidad y la aceleración actuales para estimar el siguiente estado.</p>
+          <div class="method-formulas">
+            <div><span>Velocidad</span><code>vₙ₊₁ = vₙ + h · [(T − mg)/m − (k/m)vₙ]</code></div>
+            <div><span>Altura</span><code>yₙ₊₁ = yₙ + h · vₙ</code></div>
+          </div>
+          <p class="method-footnote">La altura se actualiza con la velocidad del inicio del paso: esa es la regla de Euler explícito.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultados">
+      <div class="section">
+        <div class="section-kicker"><span>04</span> TELEMETRÍA</div>
+        <div class="results-heading"><div><h2>Datos recibidos<br>desde el vuelo.</h2><p class="section-lead">Compara Euler con la solución exacta al final de la simulación.</p></div><span class="results-chip" id="run-status">Valores iniciales</span></div>
+        <div class="summary-grid">
+          <article class="result-card"><span class="result-label">VELOCIDAD · EULER</span><strong id="metric-velocity-euler">—</strong><small>aproximación numérica</small></article>
+          <article class="result-card"><span class="result-label">VELOCIDAD · EXACTA</span><strong id="metric-velocity-exact">—</strong><small id="metric-velocity-error">Error absoluto: —</small></article>
+          <article class="result-card"><span class="result-label">ALTURA · EULER</span><strong id="metric-height-euler">—</strong><small>aproximación numérica</small></article>
+          <article class="result-card"><span class="result-label">ALTURA · EXACTA</span><strong id="metric-height-exact">—</strong><small id="metric-height-error">Error absoluto: —</small></article>
+        </div>
+        <p class="error-definition"><span aria-hidden="true">Δ</span> Error absoluto = |valor exacto − valor de Euler|</p>
+
+        <div class="charts-grid">
+          <article class="chart-card"><div class="chart-heading"><div><span class="mini-label">01 / VELOCIDAD</span><h3>¿Qué tan rápido asciende?</h3></div><span class="chart-unit">m/s</span></div><div class="chart-wrap"><svg id="velocity-chart" viewBox="0 0 760 330" role="img" aria-label="Gráfica de velocidad contra tiempo para Euler y la solución analítica"></svg></div><div class="chart-legend"><span><i class="legend-euler"></i>Euler</span><span><i class="legend-exact"></i>Solución analítica</span></div><p class="axis-caption">Tiempo (s)</p></article>
+          <article class="chart-card"><div class="chart-heading"><div><span class="mini-label">02 / ALTURA</span><h3>¿Hasta dónde llega?</h3></div><span class="chart-unit">m</span></div><div class="chart-wrap"><svg id="height-chart" viewBox="0 0 760 330" role="img" aria-label="Gráfica de altura contra tiempo para Euler y la solución analítica"></svg></div><div class="chart-legend"><span><i class="legend-euler"></i>Euler</span><span><i class="legend-exact"></i>Solución analítica</span></div><p class="axis-caption">Tiempo (s)</p></article>
+        </div>
+
+        <div class="table-section">
+          <div class="table-heading"><div><span class="mini-label">BITÁCORA DE CÁLCULO</span><h3>Iteraciones del método de Euler</h3></div><p id="table-summary">Cada fila corresponde a un paso de tiempo.</p></div>
+          <div class="table-wrap"><table class="results-table"><thead><tr><th>n</th><th>Tiempo<br>t (s)</th><th>Velocidad<br>Euler (m/s)</th><th>Velocidad<br>exacta (m/s)</th><th>Error abs.<br>velocidad</th><th>Altura<br>Euler (m)</th><th>Altura<br>exacta (m)</th><th>Error abs.<br>altura</th></tr></thead><tbody id="results-body"></tbody></table></div>
+        </div>
+        <div class="conclusion"><span class="conclusion-icon" aria-hidden="true">✳</span><div><span class="mini-label">PARA PENSAR</span><h3 id="conclusion-title">¿Qué ocurre al cambiar el paso?</h3><p id="conclusion-text">Compara los errores al probar h = 2, h = 1 y h = 0,5 segundos. Observa si una mayor cantidad de pasos acerca los resultados de Euler a la solución analítica.</p></div></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="brand" href="#inicio"><span class="brand-mark" aria-hidden="true">✦</span><span>MISIÓN <strong>ESPACIAL</strong></span></a><p>Un ejercicio de ecuaciones diferenciales y métodos numéricos.</p><a href="#inicio">Volver al inicio ↑</a></footer>
+</body>
+</html>
